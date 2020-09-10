@@ -62,7 +62,7 @@ def load_data(city, month, day):
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['hour'] = df['Start Time'].dt.hour
     df['month'] = df['Start Time'].dt.month
-    df['day_of_week'] = df['Start Time'].dt.weekday_name
+    df['day_of_week'] = df['Start Time'].dt.day_name()
     
     if month != "all":
         months = ['january', 'february', 'march', 'april', 'may', 'june']
@@ -84,15 +84,15 @@ def time_stats(df):
 
     # TO DO: display the most common month
     months = ['january', 'february', 'march', 'april', 'may', 'june']
-    print("The most common month is {}".format(months[df["month"].mode()[0] - 1].title()))
+    print("The most common month is {}.".format(months[df["month"].mode()[0] - 1].title()))
          
 
     # TO DO: display the most common day of week
-    print("The most common day of the week is {}".format(df["day_of_week"].mode()[0]))
+    print("The most common day of the week is {}.".format(df["day_of_week"].mode()[0]))
 
 
     # TO DO: display the most common start hour
-    print("The most common day of the week is {}".format(df["hour"].mode()[0]))
+    print("The most common day of the week is {}.".format(df["hour"].mode()[0]))
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -106,10 +106,10 @@ def station_stats(df):
     start_time = time.time()
 
     # TO DO: display most commonly used start station
-    print("The most commonly used start station is {}".format(df["Start Station"].mode()[0]))
+    print("The most commonly used start station is {}.".format(df["Start Station"].mode()[0]))
 
     # TO DO: display most commonly used end station
-    print("The most commonly used end station is {}".format(df["End Station"].mode()[0]))
+    print("The most commonly used end station is {}.".format(df["End Station"].mode()[0]))
 
 
     # TO DO: display most frequent combination of start station and end station trip
@@ -129,10 +129,10 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # TO DO: display total travel time
-    print("The total travel time is {} seconds".format(df["Trip Duration"].sum()))
+    print("The total travel time is {} seconds.".format(df["Trip Duration"].sum()))
 
     # TO DO: display mean travel time
-    print("The total travel time is {} seconds".format(df["Trip Duration"].mean()))
+    print("The total travel time is {} seconds.".format(df["Trip Duration"].mean()))
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -161,9 +161,9 @@ def user_stats(df):
 
     # TO DO: Display earliest, most recent, and most common year of birth
     if "Birth Year" in df.columns:
-        print("Earliest year of birth is {}".format(df["Birth Year"].min()))
-        print("Most recent year of birth is {}".format(df["Birth Year"].max()))
-        print("Most common year of birth is {}".format(df["Birth Year"].mode()[0]))
+        print("Earliest year of birth is {}.".format(df["Birth Year"].min()))
+        print("Most recent year of birth is {}.".format(df["Birth Year"].max()))
+        print("Most common year of birth is {}.".format(df["Birth Year"].mode()[0]))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
