@@ -6,6 +6,17 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 
+def display_data(df):
+    index = 0
+    rows_num = df.shape[0]
+    while str(input("Do you want to see 5 rows of input data? Yes or No ?\n")).lower() == "yes":
+        if (index + 5 < rows_num):
+            print(df.iloc[index:index+5])
+            index += 5
+        else:
+            print(df.iloc[index:])
+            break
+
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
@@ -18,9 +29,9 @@ def get_filters():
     print('Hello! Let\'s explore some US bikeshare data!')
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     city = None
-    allowed_cities = {"chicago", "new york", "washington"}
+    allowed_cities = {"chicago", "new york city", "washington"}
     while city not in allowed_cities:
-        city = str(input("Would you like to see data for Chicago, New York, or Washington?\n")).lower()
+        city = str(input("Would you like to see data for Chicago, New York City, or Washington?\n")).lower()
 
 
     # TO DO: get user input for month (all, january, february, ... , june)
@@ -52,26 +63,28 @@ def load_data(city, month, day):
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
-    if city == "chicago":
-        df = pd.read_csv("chicago.csv")
-    elif city == "new york":
-        df = pd.read_csv("new_york_city.csv")
-    else:
-        df = pd.read_csv("washington.csv")
-        
+    # Read the data frame
+    df = pd.read_csv(CITY_DATA[city], index_col=0)
+
+
+
+    # Convert time to datetime object
     df['Start Time'] = pd.to_datetime(df['Start Time'])
+    # Add hour, month and day of week column
     df['hour'] = df['Start Time'].dt.hour
     df['month'] = df['Start Time'].dt.month
     df['day_of_week'] = df['Start Time'].dt.day_name()
-    
+
+    # If the user didn't choose all months then get rows with the required month
     if month != "all":
         months = ['january', 'february', 'march', 'april', 'may', 'june']
         month = months.index(month) + 1
         df = df.loc[df["month"] == month]
 
+    # If the user didn't choose all days then get rows with the required day
     if day != "all":
         df = df.loc[df["day_of_week"] == day.title()]
-        
+
 
     return df
 
@@ -85,7 +98,7 @@ def time_stats(df):
     # TO DO: display the most common month
     months = ['january', 'february', 'march', 'april', 'may', 'june']
     print("The most common month is {}.".format(months[df["month"].mode()[0] - 1].title()))
-         
+
 
     # TO DO: display the most common day of week
     print("The most common day of the week is {}.".format(df["day_of_week"].mode()[0]))
@@ -152,6 +165,7 @@ def user_stats(df):
     print("\n")
 
     # TO DO: Display counts of gender
+    # Some files don't contain gender column
     if "Gender" in df.columns:
         print("Counts of gender:")
         for index, value in df["Gender"].value_counts().items():
@@ -160,6 +174,7 @@ def user_stats(df):
 
 
     # TO DO: Display earliest, most recent, and most common year of birth
+    # Some files don't contain birth year column
     if "Birth Year" in df.columns:
         print("Earliest year of birth is {}.".format(df["Birth Year"].min()))
         print("Most recent year of birth is {}.".format(df["Birth Year"].max()))
@@ -173,7 +188,7 @@ def main():
     while True:
         city, month, day = get_filters()
         df = load_data(city, month, day)
-
+        display_data(df)
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
@@ -186,4 +201,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
